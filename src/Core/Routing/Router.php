@@ -107,20 +107,21 @@ class Router
      */
     public function resource($model, $controller)
     {
-        if (endsWith($model, 'ies'))
-            $single = substr($model, 0, strlen($model) - 3) . 'y';
-        elseif (endsWith($model, 's'))
-            $single = substr($model, 0, strlen($model) - 1);
+        if (endsWith($model, 'y'))
+            $multi = substr($model, 0, strlen($model) - 1) . 'ies';
         else
-            $single = $model;
+            $multi = $model . 's';
 
-        $this->add($model, $controller . '#index', 'GET', $model . '.index');
-        $this->add($model . '/create', $controller . '#create', 'GET', $model . '.create');
-        $this->add($model, $controller . '#store', 'POST', $model . '.store');
-        $this->add($model . '/:' . $single, $controller . '#show', 'GET', $model . '.show');
-        $this->add($model . '/:' . $single . '/edit', $controller . '#edit', 'GET', $model . '.edit');
-        $this->add($model . '/:' . $single, $controller . '#update', 'POST', $model . '.update');
-        $this->add($model . '/:' . $single . '/delete', $controller . '#destroy', 'GET', $model . '.destroy');
+        $multi = strtolower($multi);
+        $model = strtolower($model);
+
+        $this->add($multi, $controller . '#index', 'GET', $multi . '.index');
+        $this->add($multi . '/create', $controller . '#create', 'GET', $multi . '.create');
+        $this->add($multi, $controller . '#store', 'POST', $multi . '.store');
+        $this->add($multi . '/:' . $model, $controller . '#show', 'GET', $multi . '.show');
+        $this->add($multi . '/:' . $model . '/edit', $controller . '#edit', 'GET', $multi . '.edit');
+        $this->add($multi . '/:' . $model, $controller . '#update', 'POST', $multi . '.update');
+        $this->add($multi . '/:' . $model . '/delete', $controller . '#destroy', 'GET', $multi . '.destroy');
     }
 
     /**
