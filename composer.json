@@ -1,6 +1,7 @@
 {
     "name": "frameworkatom/framework",
     "description": "Atom Framework",
+    "version": "1.0.0",
     "keywords": ["framework", "atom"],
     "license": "MIT",
     "authors": [
@@ -20,4 +21,5 @@
         "ext-openssl": "*",
         "ext-json": "*"
     }
+    "minimum-stability": "dev"
 }
