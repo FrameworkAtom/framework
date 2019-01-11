@@ -12,7 +12,7 @@
  */
 function asset($asset)
 {
-    $scheme = strtolower($_SERVER['REQUEST_SCHEME']) . '://';
+    $scheme = 'http://';
 
     return startsWith($asset, '/') ?
         $scheme . $_SERVER['HTTP_HOST'] . $asset:
@@ -50,7 +50,7 @@ function route($name, $params = [])
 
 function url($url)
 {
-    $scheme = strtolower($_SERVER['REQUEST_SCHEME']) . '://';
+    $scheme = 'http://';
 
     return startsWith($url, '/') ?
         $scheme . $_SERVER['HTTP_HOST'] . $url:
