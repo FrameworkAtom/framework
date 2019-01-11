@@ -1,6 +1,5 @@
 {
     "name": "frameworkatom/framework",
-	"type": "project",
     "description": "Atom Framework",
 	"version": "1.0.0",
     "keywords": ["framework", "atom"],
@@ -21,7 +20,5 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-json": "*"
-    },
-	"minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
