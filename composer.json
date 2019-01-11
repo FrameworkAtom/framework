@@ -20,6 +20,6 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-json": "*"
-    }
+    },
     "minimum-stability": "dev"
 }
