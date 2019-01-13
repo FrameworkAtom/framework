@@ -58,6 +58,13 @@ class Model
     protected $timestamps = false;
 
     /**
+     * Model instance.
+     *
+     * @var Model|null
+     */
+    protected static $_instance = null;
+
+    /**
      * Create a new instance of the Database.
      *
      * @param array $datas
@@ -77,6 +84,21 @@ class Model
 
         foreach ($datas as $key => $value)
             $this->$key = $value;
+
+        static::$_instance = $this;
+    }
+
+    /**
+     * Get Model instance.
+     *
+     * @return Model
+     */
+    public static function instance()
+    {
+        if (is_null(static::$_instance))
+            static::$_instance = new Model();
+
+        return static::$_instance;
     }
 
     /**
@@ -301,9 +323,28 @@ class Model
      * @param mixed $value
      * @return Model|bool
      */
-    public static function find($primaryKey, $value)
+    public static function find($value)
     {
-        $query = Database::GetDB()->prepare("SELECT * FROM ". self::tableName() ." WHERE ". $primaryKey ." = :val");
+        $query = Database::GetDB()->prepare("SELECT * FROM ". self::tableName() ." WHERE ". Model::instance()->primaryKey ." = :val");
+        $query->bindValue(':val', $value);
+
+        if ($query->execute()) {
+            return $query->fetchAll(\PDO::FETCH_CLASS, get_called_class())[0];
+        }
+
+        return false;
+    }
+
+    /**
+     * Get model where the given column equals to the given value.
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return Model|bool
+     */
+    public static function where($column, $value)
+    {
+        $query = Database::GetDB()->prepare("SELECT * FROM ". self::tableName() ." WHERE ". $column ." = :val");
         $query->bindValue(':val', $value);
 
         if ($query->execute()) {
