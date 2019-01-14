@@ -42,7 +42,7 @@ class Router
      *
      * @var string
      */
-    public static $controllersPath = "App\\Controller\\";
+    public static $controllersPath = "\\App\\Controllers\\";
 
     /**
      * Create new instance of the Router.
@@ -222,7 +222,12 @@ class Router
      */
     public function routes()
     {
-        return $this->routes;
+        $routes = [];
+
+        foreach ($this->namedRoutes as $key => $route)
+            $routes[$key] = $route->getPath();
+
+        return $routes;
     }
 
 }

@@ -12,7 +12,7 @@
  */
 function asset($asset)
 {
-    $scheme = 'http://';
+    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? $_SERVER['HTTPS'] : 'http://';
 
     return startsWith($asset, '/') ?
         $scheme . $_SERVER['HTTP_HOST'] . $asset:
@@ -45,18 +45,36 @@ function secure_asset($asset)
  */
 function route($name, $params = [])
 {
-    return \Atom\Routing\Router::instance()->url($name, $params);
-}
+    $url = \Atom\Routing\Router::instance()->url($name, $params);
 
-function url($url)
-{
-    $scheme = 'http://';
+    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? $_SERVER['HTTPS'] : 'http://';
 
     return startsWith($url, '/') ?
         $scheme . $_SERVER['HTTP_HOST'] . $url:
         $scheme . $_SERVER['HTTP_HOST'] . '/' . $url;
 }
 
+/**
+ * Generate URL from the given string.
+ * 
+ * @param string $url
+ * @return string
+ */
+function url($url)
+{
+    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? $_SERVER['HTTPS'] : 'https://';
+
+    return startsWith($url, '/') ?
+        $scheme . $_SERVER['HTTP_HOST'] . $url:
+        $scheme . $_SERVER['HTTP_HOST'] . '/' . $url;
+}
+
+/**
+ * Generate secure URL from the given string.
+ *
+ * @param string $url
+ * @return string
+ */
 function secure_url($url)
 {
     $scheme = 'https://';
@@ -64,32 +82,4 @@ function secure_url($url)
     return startsWith($url, '/') ?
         $scheme . $_SERVER['HTTP_HOST'] . $url:
         $scheme . $_SERVER['HTTP_HOST'] . '/' . $url;
-}
-
-/**
- * Generate fully qualified URL for the given named route.
- *
- * @param string $name
- * @param array $params
- * @return string
- *
- * @throws Exception
- */
-function named_url($name, $params = [])
-{
-    return url(route($name, $params));
-}
-
-/**
- * Generate fully qualified secure URL for the given named route.
- *
- * @param string $name
- * @param array $params
- * @return string
- *
- * @throws Exception
- */
-function secure_named_url($name, $params = [])
-{
-    return secure_url(route($name, $params));
 }

@@ -6,6 +6,7 @@ namespace Atom\Request;
 use Atom\Cookie\Cookie;
 use Atom\Exceptions\InvalidDiskTypeException;
 use Atom\Flash\Flash;
+use Atom\Session\Session;
 use Atom\Storage\Storage;
 
 class Request
@@ -39,6 +40,11 @@ class Request
      */
     protected $params = [];
 
+    /**
+     * Create new instance of Request.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->reload();
@@ -148,9 +154,10 @@ class Request
      * @param array|string $keys
      * @return array
      */
-    public function except($keys)
+    public function except(...$keys)
     {
         $this->inputs = $_POST;
+        $keys = func_get_args();
 
         if (is_array($keys)) {
 
@@ -250,6 +257,18 @@ class Request
     public function cookie($name)
     {
         return Cookie::get($name);
+    }
+
+    /**
+     * Get the session manager.
+     *
+     * @return Session
+     *
+     * @throws \Atom\Exceptions\SessionException
+     */
+    public function session()
+    {
+        return Session::instance();
     }
 
 }

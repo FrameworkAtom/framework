@@ -139,7 +139,7 @@ class Route
         if (is_string($this->callable)) {
             $params = explode('#', $this->callable);
             $controller = Router::$controllersPath . $params[0];
-            $controller = new $controller();
+            $controller = new $controller;
             extract($this->globals);
             $this->callMiddleware();
 
@@ -241,6 +241,11 @@ class Route
                 call_user_func_array([$controller, 'handle'], []);
             }
         }
+    }
+
+    public function getPath()
+    {
+        return $this->path;
     }
 
 }
