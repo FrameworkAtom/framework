@@ -165,7 +165,7 @@ class Poison
      * @param $tag
      * @return mixed|string
      */
-    private function parseTag($tag)
+    private function parseTag(&$tag)
     {
         $real = $tag;
 
@@ -175,12 +175,22 @@ class Poison
         }
 
         if (startsWith($tag, '{{') && endsWith($tag, '}}')) {
-            $real = str_replace("{{", "<?=", $tag);
-            $real = str_replace("}}", ";?>", $real);
+            $real = str_replace("{{", "<?= htmlspecialchars(", $tag);
+            $real = str_replace("}}", ") ;?>", $real);
+        }
+
+        if (startsWith($tag, '{!!') && endsWith($tag, '}}')) {
+            $real = str_replace("{!!", "<?= ", $tag);
+            $real = str_replace("!!}", ";?>", $real);
+        }
+
+        if (startsWith($tag, '{{--') && endsWith($tag, '--}}')) {
+            $real = str_replace("{{--", "<!--", $tag);
+            unset($tag);
         }
 
         if (startsWith($tag, '@url')) {
-            $real = str_replace("@url", "<?= \$router->url", $tag);
+            $real = str_replace("@url", "<?= route(", $tag);
             $real = str_replace(")", "); ?>", $real);
         }
 
@@ -211,12 +221,14 @@ class Poison
             $real = str_replace("@endif", "<?php endif; ?>", $tag);
         }
 
-        if (startsWith($tag, '{?')) {
-            $real = str_replace("{?", "<?php", $tag);
+        if(startsWith($tag, '@php')) {
+            $real = str_replace("@php", "<?php ", $tag);
+            $real = $real . ": ?>";
         }
 
-        if (startsWith($tag, '?}')) {
-            $real = str_replace("?}", "?>", $tag);
+        if(startsWith($tag, '@endphp')) {
+            $real = str_replace("@endphp", " ?> ", $tag);
+            $real = $real . ": ?>";
         }
 
         if (startsWith($tag, '@extend')) {
