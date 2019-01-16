@@ -208,7 +208,7 @@ class Application
      * @param bool $force
      * @return bool
      */
-    protected function secure($force = false)
+    public function secure($force = false)
     {
         $config = env()->config();
         $secure = false;

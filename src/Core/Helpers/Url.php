@@ -62,7 +62,7 @@ function route($name, $params = [])
  */
 function url($url)
 {
-    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? $_SERVER['HTTPS'] : 'https://';
+    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? $_SERVER['HTTPS'] : 'http://';
 
     return startsWith($url, '/') ?
         $scheme . $_SERVER['HTTP_HOST'] . $url:

@@ -107,10 +107,7 @@ class Router
      */
     public function resource($model, $controller)
     {
-        if (endsWith($model, 'y'))
-            $multi = substr($model, 0, strlen($model) - 1) . 'ies';
-        else
-            $multi = $model . 's';
+        $multi = plural($model);
 
         $multi = strtolower($multi);
         $model = strtolower($model);
@@ -200,7 +197,7 @@ class Router
             throw new RouterException("No route matches this name {$name}");
         }
 
-        header('location: ' . named_url($name, $params), true, '302');
+        header('location: ' . route($name, $params), true, '302');
         return request();
     }
 

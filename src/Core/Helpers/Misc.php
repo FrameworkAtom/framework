@@ -16,6 +16,16 @@ function endsWith($haystack, $needle)
     return (substr($haystack, -$length) === $needle);
 }
 
+function plural($str)
+{
+    if (endsWith($str, 'y'))
+        $multi = substr($str, 0, strlen($str) - 1) . 'ies';
+    else
+        $multi = $str . 's';
+
+    return $multi;
+}
+
 /**
  * Dump expressions.
  *
