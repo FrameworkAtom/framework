@@ -147,7 +147,6 @@ class Router
      *
      * @return mixed
      *
-     * @throws RouterException
      */
     public function run()
     {
@@ -161,7 +160,7 @@ class Router
             }
         }
 
-        throw new RouterException('No matching routes');
+        http_throw();
     }
 
     /**

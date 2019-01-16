@@ -83,3 +83,21 @@ function secure_url($url)
         $scheme . $_SERVER['HTTP_HOST'] . $url:
         $scheme . $_SERVER['HTTP_HOST'] . '/' . $url;
 }
+
+/**
+ * Throw an error page.
+ *
+ * @param int $code
+ * @return void
+ */
+function http_throw($code = 404)
+{
+    ob_start();
+
+    include(__DIR__ . '/../Exceptions/404/404.html');
+    $contents = ob_get_clean();
+
+    http_response_code($code);
+
+    echo $contents;
+}
