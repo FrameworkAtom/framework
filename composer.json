@@ -1,6 +1,6 @@
 {
     "name": "frameworkatom/framework",
-	"type": "project",
+	"type": "library",
     "description": "Atom Framework",
 	"version": "1.0.0",
     "keywords": ["framework", "atom"],
