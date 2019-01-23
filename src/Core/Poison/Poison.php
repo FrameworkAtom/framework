@@ -170,23 +170,22 @@ class Poison
         $real = $tag;
 
         if (startsWith($tag, '@include')) {
-            $real = str_replace("@include", "<?= \$poison->include", $tag);
+            $real = str_replace("@include", "<?= poison()->include", $tag);
             $real = $real . '; ?>';
         }
 
         if (startsWith($tag, '{{') && endsWith($tag, '}}')) {
-            $real = str_replace("{{", "<?= htmlspecialchars(", $tag);
-            $real = str_replace("}}", ") ;?>", $real);
+            $real = str_replace("{{", "<?= htmlspecialchars('", $tag);
+            $real = str_replace("}}", "') ;?>", $real);
         }
 
-        if (startsWith($tag, '{!!') && endsWith($tag, '}}')) {
+        if (startsWith($tag, '{!!') && endsWith($tag, '!!}')) {
             $real = str_replace("{!!", "<?= ", $tag);
             $real = str_replace("!!}", ";?>", $real);
         }
 
         if (startsWith($tag, '{{--') && endsWith($tag, '--}}')) {
-            $real = str_replace("{{--", "<!--", $tag);
-            unset($tag);
+            $real = null;
         }
 
         if (startsWith($tag, '@url')) {
@@ -223,29 +222,40 @@ class Poison
 
         if(startsWith($tag, '@php')) {
             $real = str_replace("@php", "<?php ", $tag);
-            $real = $real . ": ?>";
         }
 
         if(startsWith($tag, '@endphp')) {
             $real = str_replace("@endphp", " ?> ", $tag);
-            $real = $real . ": ?>";
+        }
+        
+        if (startsWith($tag, '@var')) {
+          $real = str_replace('@var', '<?php poison()->def', $tag);
+          $real = $real . '; ?>';
+        }
+
+        if (startsWith($tag, '@section')) {
+          $real = str_replace('@section', '<?php poison()->def', $tag);
+          $real = substr($real, 0, -2);
+          $real = $real . ', "';
+        }
+        
+        if (startsWith($tag, '@endsection')) {
+          $real = str_replace('@endsection', '"); ?>', $real);
         }
 
         if (startsWith($tag, '@extend')) {
-            $real = str_replace('@extend', '', $tag);
-            $real = str_replace('(', '[', $real);
-            $real = str_replace(')', ']', $real);
-            $real = "<?php \$extension=" . $real;
-            $real = $real . "; ?>";
-            $real = str_replace("\"", "'", $real);
+          $real = str_replace('@extend', '<?php poison()->include', $tag);
+          $real = $real . '; ?>';
         }
 
-        if (startsWith($tag, '@content')) {
-            $real = str_replace("@content", "<?php ob_start(); ?>", $tag);
+        if (startsWith($tag, '@show')) {
+          $real = str_replace('@show', '<?php show', $tag);
+          $real = str_replace(')', '); ?>', $real);
         }
 
-        if (startsWith($tag, '@endcontent')) {
-            $real = str_replace("@endcontent", "<?php \$extension[1]['content'] = ob_get_clean(); \$poison->render(\$extension[0], \$extension[1]); ?>", $tag);
+        if (startsWith($tag, '@yield')) {
+          $real = str_replace('@yield', '<?php show', $tag);
+          $real = str_replace(')', '); ?>', $real);
         }
 
         return $real;
@@ -351,6 +361,16 @@ class Poison
         } else {
             throw new PoisonException("File [{$file}] not found.");
         }
+    }
+
+    public function show($var)
+    {
+      echo $GLOBALS[$var];
+    }
+
+    public function def($name, $value)
+    {
+      $GLOBALS[$name] = $value;
     }
 
 }

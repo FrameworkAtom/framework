@@ -436,3 +436,27 @@ function cookie($name, $value, $expire = null)
 {
     return \Atom\Cookie\Cookie::set($name, $value, $expire);
 }
+
+/**
+ * Show variablr
+ * 
+ * @param mixed $var
+ * @return void
+ */
+function show($var)
+{
+  poison()->show($var);
+}
+
+/**
+ * Define variable
+ * 
+ * @param string $name
+ * @param mixed $value
+ * 
+ * @return void
+ */
+function def($name, $value)
+{
+  poison()->def($name, $value);
+}
