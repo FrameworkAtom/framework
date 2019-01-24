@@ -95,10 +95,7 @@ class Flash
                 $items[] = array_values(get_object_vars($item))[0];
             }
             
-            if (count($items) == 1)
-                return $items[0];
-            else
-                return $items;
+            return $items[0];
         } else {
             
             if ($this->has($type)) {
@@ -107,10 +104,8 @@ class Flash
                     $item = json_decode($item);
                     if (isset($item->$type)) $items[] = $item->$type;
                 }
-                if (count($items) == 1)
-                    return $items[0];
-                else
-                    return $items;
+                
+                return $items[0];
             }
 
         }
