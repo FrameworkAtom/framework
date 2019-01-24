@@ -214,4 +214,17 @@ class Auth
         }
     }
 
+    /**
+     * Get the logged user.
+     * 
+     * @return mixed|null
+     */
+    public function user()
+    {
+      if ($this->check())
+        return decrypt(session('session_user'));
+
+      return null;
+    }
+
 }
