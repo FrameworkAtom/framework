@@ -174,14 +174,14 @@ class Poison
             $real = $real . '; ?>';
         }
 
-        if (startsWith($tag, '{{') && endsWith($tag, '}}')) {
-            $real = str_replace("{{", "<?= htmlspecialchars('", $tag);
-            $real = str_replace("}}", "') ;?>", $real);
+        if (startsWith($tag, '{!!') && endsWith($tag, '!!}')) {
+            $real = str_replace("{!!", "<?= htmlspecialchars('", $tag);
+            $real = str_replace("!!}", "') ;?>", $real);
         }
 
-        if (startsWith($tag, '{!!') && endsWith($tag, '!!}')) {
-            $real = str_replace("{!!", "<?= ", $tag);
-            $real = str_replace("!!}", ";?>", $real);
+        if (startsWith($tag, '{{') && endsWith($tag, '}}')) {
+            $real = str_replace("{{", "<?= ", $tag);
+            $real = str_replace("}}", ";?>", $real);
         }
 
         if (startsWith($tag, '{{--') && endsWith($tag, '--}}')) {
@@ -189,7 +189,7 @@ class Poison
         }
 
         if (startsWith($tag, '@url')) {
-            $real = str_replace("@url", "<?= route(", $tag);
+            $real = str_replace("@url", "<?= route", $tag);
             $real = str_replace(")", "); ?>", $real);
         }
 
